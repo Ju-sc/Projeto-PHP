@@ -7,7 +7,7 @@ require_once "includes/menu_admin.php";
 
 //Se está logado como aluno, sai
     if ($_SESSION["usuario_tipo"] == "usuario") {
-  header("Location: meus.php");
+      header("Location: meus_cursos.php");
     exit;
   }
 
