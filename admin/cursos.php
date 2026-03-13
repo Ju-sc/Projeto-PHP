@@ -15,6 +15,20 @@ $sqlCursos = "SELECT * FROM cursos";
 $resultadoCursos = mysqli_query($conexao, $sqlCursos);
 
 
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  $imagem = $_FILES["capa"];
+  $tiposPerm = ["image/jpeg", "image/png", "image/webp"];
+
+  if (!in_array($imagem["type"], $tiposPerm)){
+      $erro = "Tipo não permitido. Use JPEG, PNG ou WEBP";
+  } else {
+      $extensao = pathinfo($imagem["name"], PATHINFO_EXTENSION);
+      $NomeImagem = "produto_". time(). ".". $extensao;
+      move_uploaded_file($imagem["tmp_name"], "../uploads/" . $NomeImagem);
+  }
+}
+
+
 ?>
 
 <!DOCTYPE html>
@@ -84,7 +98,7 @@ $resultadoCursos = mysqli_query($conexao, $sqlCursos);
                 <h1 class="text-xl font-extrabold text-gray-800">Gerenciar Cursos</h1>
                 <p class="text-sm text-gray-500">Cadastre, edite e organize os cursos da plataforma</p>
             </div>
-            <a href="curso_form.php" class="bg-senai-green text-white font-bold px-4 py-2.5 rounded-lg text-sm hover:bg-green-600 transition flex items-center gap-2">
+            <a href="curso_form.php?" class="bg-senai-green text-white font-bold px-4 py-2.5 rounded-lg text-sm hover:bg-green-600 transition flex items-center gap-2">
                 + Novo Curso
             </a>
         </div>
@@ -120,14 +134,19 @@ $resultadoCursos = mysqli_query($conexao, $sqlCursos);
                             <td class="px-4 py-3"><?php echo $linha ["id"]; ?></td>
                             <td class="px-4 py-3">
                             <div style="display: flex; align-items: center; gap: 10px;"> 
-                            <?php echo $linha['capa']; ?>
-                            <?php if (empty($linha["capa"])): ?>
-                              Sem imagem                                           
-                            <?php else:?>
-                              <img src="../uploads/<?= $linha["capa"] ?>"
-                              width="60">
-                            <?php endif; ?>
-                            <div> 
+                            <td class="px-4 py-3">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <?php if (!empty($linha["capa"])): ?>
+                                        <img src="../uploads/<?= $linha["capa"] ?>" width="50" height="50" style="border-radius: 8px; object-fit: cover;">
+                                    <?php else: ?>
+                                        <div style="width:50px; height:50px; background:#ddd; border-radius:8px; display:flex; align-items:center; justify-content:center;">📚</div>
+                                    <?php endif; ?>
+                                    <div>
+                                        <strong><?php echo $linha['titulo']; ?></strong>
+                                        <div style="color: gray; font-size: 12px;"><?php echo $linha['descricao']; ?></div>
+                                    </div>
+                                </div>
+                            </td>
                             <strong><?php echo $linha['titulo']; ?></strong>
                             <div style="color: gray; font-size: 12px;"><?php echo $linha['descricao']; ?></div>
                             </div> 
@@ -138,99 +157,18 @@ $resultadoCursos = mysqli_query($conexao, $sqlCursos);
                             <td class="px-4 py-3 text-center">
                                 <div class="flex items-center justify-center gap-1.5">
                                     <a href="modulos.html" class="bg-senai-blue text-white text-xs px-2.5 py-1.5 rounded-md hover:bg-senai-blue-dark transition">📦 Módulos</a>
-                                    <a href="curso_form.html" class="bg-yellow-500 text-white text-xs px-2.5 py-1.5 rounded-md hover:bg-yellow-600 transition">✏ Editar</a>
+                                    <a href="curso_form.php?id=<?= $linha ["id"]?>
+                                    </a> class="bg-yellow-500 text-white text-xs px-2.5 py-1.5 rounded-md hover:bg-yellow-600 transition">✏ Editar</a>
                                     <button onclick="return confirm('Excluir este curso?')" class="bg-senai-red text-white text-xs px-2.5 py-1.5 rounded-md hover:bg-red-700 transition">🗑</button>
                                 </div>
                             </td>
                     <?php endwhile; ?>
-                        <!-- CURSO 1 -->
-                        <tr class="hover:bg-gray-50 transition">
-                            <td class="px-4 py-3 text-gray-400 font-mono text-xs">1</td>
-                            <td class="px-4 py-3">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg flex items-center justify-center flex-shrink-0">
-                                        <span class="text-lg">🌐</span>
-                                    </div>
-                                    <div>
-                                        <p class="font-semibold text-gray-800">HTML e CSS do Zero</p>
-                                        <p class="text-xs text-gray-400 mt-0.5">Aprenda a criar páginas web...</p>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="px-4 py-3 text-center text-gray-600 font-semibold">3</td>
-                            <td class="px-4 py-3 text-center text-gray-600 font-semibold">9</td>
-                            <td class="px-4 py-3 text-center text-gray-600 font-semibold">14</td>
-                            <td class="px-4 py-3 text-center">
-                                <span class="bg-green-100 text-green-700 text-xs font-bold px-2.5 py-1 rounded-full">Ativo</span>
-                            </td>
-                            <td class="px-4 py-3 text-center text-xs text-gray-400">01/01/2025</td>
-                            <td class="px-4 py-3 text-center">
-                                <div class="flex items-center justify-center gap-1.5">
-                                    <a href="modulos.html" class="bg-senai-blue text-white text-xs px-2.5 py-1.5 rounded-md hover:bg-senai-blue-dark transition" title="Ver Módulos">📦 Módulos</a>
-                                    <a href="curso_form.html" class="bg-yellow-500 text-white text-xs px-2.5 py-1.5 rounded-md hover:bg-yellow-600 transition" title="Editar">✏ Editar</a>
-                                    <button onclick="return confirm('Excluir este curso?')" class="bg-senai-red text-white text-xs px-2.5 py-1.5 rounded-md hover:bg-red-700 transition" title="Excluir">🗑</button>
-                                </div>
-                            </td>
-                        </tr>
-
-                        <!-- CURSO 2 -->
-                        <tr class="hover:bg-gray-50 transition">
-                            <td class="px-4 py-3 text-gray-400 font-mono text-xs">2</td>
-                            <td class="px-4 py-3">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 bg-gradient-to-br from-orange-400 to-red-500 rounded-lg flex items-center justify-center flex-shrink-0">
-                                        <span class="text-lg">🐘</span>
-                                    </div>
-                                    <div>
-                                        <p class="font-semibold text-gray-800">PHP para Iniciantes</p>
-                                        <p class="text-xs text-gray-400 mt-0.5">Introdução ao back-end com PHP...</p>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="px-4 py-3 text-center text-gray-600 font-semibold">2</td>
-                            <td class="px-4 py-3 text-center text-gray-600 font-semibold">5</td>
-                            <td class="px-4 py-3 text-center text-gray-600 font-semibold">8</td>
-                            <td class="px-4 py-3 text-center">
-                                <span class="bg-green-100 text-green-700 text-xs font-bold px-2.5 py-1 rounded-full">Ativo</span>
-                            </td>
-                            <td class="px-4 py-3 text-center text-xs text-gray-400">05/01/2025</td>
-                            <td class="px-4 py-3 text-center">
-                                <div class="flex items-center justify-center gap-1.5">
-                                    <a href="modulos.html" class="bg-senai-blue text-white text-xs px-2.5 py-1.5 rounded-md hover:bg-senai-blue-dark transition">📦 Módulos</a>
-                                    <a href="curso_form.html" class="bg-yellow-500 text-white text-xs px-2.5 py-1.5 rounded-md hover:bg-yellow-600 transition">✏ Editar</a>
-                                    <button onclick="return confirm('Excluir este curso?')" class="bg-senai-red text-white text-xs px-2.5 py-1.5 rounded-md hover:bg-red-700 transition">🗑</button>
-                                </div>
-                            </td>
-                        </tr>
-
-                        <!-- CURSO 3 -->
-                        <tr class="hover:bg-gray-50 transition">
-                            <td class="px-4 py-3 text-gray-400 font-mono text-xs">3</td>
-                            <td class="px-4 py-3">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-lg flex items-center justify-center flex-shrink-0">
-                                        <span class="text-lg">⚡</span>
-                                    </div>
-                                    <div>
-                                        <p class="font-semibold text-gray-800">JavaScript Moderno (ES6+)</p>
-                                        <p class="text-xs text-gray-400 mt-0.5">Fundamentos e recursos do JS...</p>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="px-4 py-3 text-center text-gray-600 font-semibold">4</td>
-                            <td class="px-4 py-3 text-center text-gray-600 font-semibold">12</td>
-                            <td class="px-4 py-3 text-center text-gray-600 font-semibold">2</td>
-                            <td class="px-4 py-3 text-center">
-                                Inativo</span>
-                            </td>
-                            <td class="px-4 py-3 text-center text-xs text-gray-400">10/01/2025</td>
-                            
-                        </tr>
-
-                    </tbody>
-                </table>
+                        
+                                      
 
                 <!-- RODAPÉ DA TABELA -->
+
+                
                 <div class="border-t border-gray-100 px-4 py-3 flex items-center justify-between bg-gray-50">
                     <p class="text-xs text-gray-400">Exibindo 3 de 3 cursos</p>
                     <div class="flex gap-1">
