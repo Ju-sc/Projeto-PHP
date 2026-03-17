@@ -5,12 +5,6 @@ session_start();
 require_once "../conexao.php";
 require_once "includes/menu_admin.php"; 
 
-//Se está logado como aluno, sai
-    if ($_SESSION["usuario_tipo"] == "usuario") {
-      header("Location: meus_cursos.php");
-    exit;
-  }
-  
 $sqlCursos = "SELECT * FROM cursos";
 $resultadoCursos = mysqli_query($conexao, $sqlCursos);
 
@@ -19,6 +13,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $imagem = $_FILES["capa"];
   $tiposPerm = ["image/jpeg", "image/png", "image/webp"];
 
+
+if ($capa["size"] > 0){
   if (!in_array($imagem["type"], $tiposPerm)){
       $erro = "Tipo não permitido. Use JPEG, PNG ou WEBP";
   } else {
@@ -27,7 +23,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       move_uploaded_file($imagem["tmp_name"], "../uploads/" . $NomeImagem);
   }
 }
+}
 
+if (isset($_GET["deletado"])) {
+    $sucesso = "Curso excluído com sucesso!";
+}
 
 ?>
 
@@ -106,12 +106,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="p-6 flex-1">
 
             <!-- MENSAGEM DE SUCESSO -->
+             <?php if (!empty($sucesso)): ?>
             <div class="bg-green-50 border border-green-300 text-green-700 rounded-lg p-3 mb-5 flex items-center gap-2 text-sm">
-                <span class="font-bold text-base">✓</span>
+                <span class="font-bold text-base">✓</span> 
                 <span>Curso excluído com sucesso!</span>
                 <button class="ml-auto text-green-400 hover:text-green-700 text-lg leading-none">×</button>
             </div>
-
+            <?php endif; ?>
             <!-- TABELA DE CURSOS -->
             <div class="bg-white rounded-xl shadow-sm overflow-hidden">
                 <table class="w-full text-sm">
@@ -156,15 +157,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <td class="px-4 py-3 ">
                             <td class="px-4 py-3 text-center">
                                 <div class="flex items-center justify-center gap-1.5">
-                                    <a href="modulos.html" class="bg-senai-blue text-white text-xs px-2.5 py-1.5 rounded-md hover:bg-senai-blue-dark transition">📦 Módulos</a>
-                                    <a href="curso_form.php?id=<?= $linha ["id"]?>
-                                    </a> class="bg-yellow-500 text-white text-xs px-2.5 py-1.5 rounded-md hover:bg-yellow-600 transition">✏ Editar</a>
-                                    <button onclick="return confirm('Excluir este curso?')" class="bg-senai-red text-white text-xs px-2.5 py-1.5 rounded-md hover:bg-red-700 transition">🗑</button>
+                                    <a href="modulos.php" class="bg-senai-blue text-white text-xs px-2.5 py-1.5 rounded-md hover:bg-senai-blue-dark transition">📦 Módulos</a>
+
+                                    <a href="curso_form.php?id=<?= $linha["id"]?>" 
+                                    class="bg-yellow-500 text-white text-xs px-2.5 py-1.5 rounded-md hover:bg-yellow-600 transition">✏ Editar</a>
+
+                                        
+                                <a href="curso_delete.php?id=<?php echo $linha['id']; ?>"
+                                onclick="return confirm('Excluir este curso?')"
+                                class="bg-senai-red text-white text-xs px-2.5 py-1.5 rounded-md hover:bg-red-700 transition">🗑
+                                </a>                           
                                 </div>
                             </td>
                     <?php endwhile; ?>
                         
-                                      
+                                  
 
                 <!-- RODAPÉ DA TABELA -->
 
