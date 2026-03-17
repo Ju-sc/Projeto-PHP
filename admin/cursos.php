@@ -87,7 +87,7 @@ if (isset($_GET["deletado"])) {
             <a href="modulos.php"    class="nav-link">📦 <span>Módulos</span></a>
             <a href="aulas.php"      class="nav-link">🎬 <span>Aulas</span></a>
             <div class="pt-2 border-t border-gray-700 mt-2">
-                <a href="../meus_cursos.php" class="nav-link">👁 <span>Ver site</span></a>
+                <a href="../index.php" class="nav-link">👁 <span>Ver site</span></a>
                 <a href="../login.php"       class="nav-link text-red-400 hover:text-red-300">🚪 <span>Sair</span></a>
             </div>
         </nav>
@@ -136,43 +136,32 @@ if (isset($_GET["deletado"])) {
 
                     <?php while ($linha = mysqli_fetch_assoc($resultadoCursos)): ?>
                         <tr class="border-b border-gray-200 hover:bg-gray-50">
-                            <td class="px-4 py-3"><?php echo $linha ["id"]; ?></td>
-                            <td class="px-4 py-3">
-                            <div style="display: flex; align-items: center; gap: 10px;"> 
-                            <td class="px-4 py-3">
-                                <div style="display: flex; align-items: center; gap: 10px;">
-                                    <?php if (!empty($linha["capa"])): ?>
-                                        <img src="../uploads/<?= $linha["capa"] ?>" width="50" height="50" style="border-radius: 8px; object-fit: cover;">
-                                    <?php else: ?>
-                                        <div style="width:50px; height:50px; background:#ddd; border-radius:8px; display:flex; align-items:center; justify-content:center;">📚</div>
-                                    <?php endif; ?>
-                                    <div>
-                                        <strong><?php echo $linha['titulo']; ?></strong>
-                                        <div style="color: gray; font-size: 12px;"><?php echo $linha['descricao']; ?></div>
-                                    </div>
-                                </div>
-                            </td>
-                            <strong><?php echo $linha['titulo']; ?></strong>
-                            <div style="color: gray; font-size: 12px;"><?php echo $linha['descricao']; ?></div>
-                            </div> 
-                            </td>
-                            <td class="px-4 py-3"><?php echo $linha['ativo'] == 1 ? "Sim" : "Não"; ?></td>
-                            <td class="px-4 py-3"><?php echo $linha['criado_em']; ?></td>
-                            <td class="px-4 py-3 ">
-                            <td class="px-4 py-3 text-center">
-                                <div class="flex items-center justify-center gap-1.5">
-                                    <a href="modulos.php" class="bg-senai-blue text-white text-xs px-2.5 py-1.5 rounded-md hover:bg-senai-blue-dark transition">📦 Módulos</a>
-
-                                    <a href="curso_form.php?id=<?= $linha["id"]?>" 
-                                    class="bg-yellow-500 text-white text-xs px-2.5 py-1.5 rounded-md hover:bg-yellow-600 transition">✏ Editar</a>
-
-                                        
-                                <a href="curso_delete.php?id=<?php echo $linha['id']; ?>"
-                                onclick="return confirm('Excluir este curso?')"
-                                class="bg-senai-red text-white text-xs px-2.5 py-1.5 rounded-md hover:bg-red-700 transition">🗑
-                                </a>                           
-                                </div>
-                            </td>
+    <td class="px-4 py-3"><?php echo $linha["id"]; ?></td>
+    <td class="px-4 py-3">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <?php if (!empty($linha["capa"])): ?>
+                <img src="../uploads/<?= $linha["capa"] ?>" width="50" height="50" style="border-radius: 8px; object-fit: cover;">
+            <?php else: ?>
+                <div style="width:50px; height:50px; background:#ddd; border-radius:8px; display:flex; align-items:center; justify-content:center;">📚</div>
+            <?php endif; ?>
+            <div>
+                <strong><?php echo $linha['titulo']; ?></strong>
+                <div style="color: gray; font-size: 12px;"><?php echo $linha['descricao']; ?></div>
+            </div>
+        </div>
+    </td>
+    <td class="px-4 py-3"><?php echo $linha['ativo'] == 1 ? "Sim" : "Não"; ?></td>
+    <td class="px-4 py-3"><?php echo $linha['criado_em']; ?></td>
+    <td class="px-4 py-3 text-center">
+        <div class="flex items-center justify-center gap-1.5">
+            <a href="modulos.php" class="bg-senai-blue text-white text-xs px-2.5 py-1.5 rounded-md hover:bg-senai-blue-dark transition">📦 Módulos</a>
+            <a href="curso_form.php?id=<?= $linha["id"]?>" class="bg-yellow-500 text-white text-xs px-2.5 py-1.5 rounded-md hover:bg-yellow-600 transition">✏ Editar</a>
+            <a href="curso_delete.php?id=<?php echo $linha['id']; ?>"
+            onclick="return confirm('Excluir este curso?')"
+            class="bg-senai-red text-white text-xs px-2.5 py-1.5 rounded-md hover:bg-red-700 transition">🗑</a>
+        </div>
+    </td>
+</tr>
                     <?php endwhile; ?>
                         
                                   

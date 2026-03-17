@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+require_once "../conexao.php";
 //Se está logado como aluno, sai
 
 if ($_SESSION["usuario_tipo"] == "aluno") {

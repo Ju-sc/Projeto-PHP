@@ -127,7 +127,7 @@ if (empty($erro)) {
             <a href="aulas.php"      class="nav-link">🎬 <span>Aulas</span></a>
             <div class="pt-2 border-t border-gray-700 mt-2">
                 <a href="../meus_cursos.php" class="nav-link">👁 <span>Ver site</span></a>
-                <a href="../login.php"       class="nav-link text-red-400 hover:text-red-300">🚪 <span>Sair</span></a>
+                <a href="../logout.php"       class="nav-link text-red-400 hover:text-red-300">🚪 <span>Sair</span></a>
             </div>
         </nav>
     </aside>
