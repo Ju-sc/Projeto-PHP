@@ -3,9 +3,11 @@
 session_start();
 
 require_once "../conexao.php";
-require_once "includes/menu_admin.php"; 
 
-
+if ($_SESSION["usuario_tipo"] == "aluno") {
+    header("Location: ../meus_cursos.php");
+    exit;
+}
 
 if (isset($_GET['id'])) {
 $id = $_GET["id"];

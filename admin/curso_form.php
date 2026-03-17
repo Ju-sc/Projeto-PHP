@@ -3,8 +3,11 @@
 session_start();
 
 require_once "../conexao.php";
-require_once "includes/menu_admin.php"; 
 
+if ($_SESSION["usuario_tipo"] == "aluno") {
+    header("Location: ../meus_cursos.php");
+    exit;
+}
 
 $erro = "";
 $sucesso = "";
@@ -217,7 +220,7 @@ if (empty($erro)) {
                             <div class="flex gap-3 pt-2 border-t border-gray-100">
                                 <button type="submit" class="bg-senai-blue hover:bg-senai-blue-dark text-white font-bold px-6 py-2.5 rounded-lg text-sm transition flex items-center gap-2">
                                 <?= $editando ? "💾 Salvar Alterações" : "💾 Cadastrar Curso" ?>
-                                
+
                                 </button>
                                 <a href="cursos.php" class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold px-6 py-2.5 rounded-lg text-sm transition">
                                     Cancelar

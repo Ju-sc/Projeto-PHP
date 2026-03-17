@@ -2,10 +2,13 @@
 
 session_start();
 
+
 require_once "../conexao.php";
-require_once "includes/menu_admin.php"; 
 
-
+if ($_SESSION["usuario_tipo"] == "aluno") {
+    header("Location: ../meus_cursos.php");
+    exit;
+}
 
 if (isset($_GET['id'])) {
 $id = $_GET["id"];
@@ -27,13 +30,19 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     if ($id > 0) {
         // Atualizar o modulo existente
-        $sql = "UPDATE modulo SET curso_id = '$CursoID', titulo = '$titulo', descricao = '$descricao', ordem = '$ordem', where id = '$id'";
+        $sql = "UPDATE modulo 
+        SET curso_id = '$CursoID', titulo = '$titulo', descricao = '$descricao', ordem = '$ordem', where id = '$id'";
+        
     } else {
          // Inserir o novo curso
-        $sql = "INSERT INTO cursos (titulo, descricao, ativo, capa) VALUES ('$titulo', '$descricao', '$ativo', '$NomeImagem')";
+        $sql = "INSERT INTO cursos (titulo, descricao, ativo, capa) 
+        VALUES ('$titulo', '$descricao', '$ativo', '$NomeImagem')";
+        
     }
     if (mysqli_query($conexao, $sql)) {
             $sucesso = "Curso cadastrado com sucesso!";
+            header("Location: cursos.php");
+            exit;
         } else {
             $erro = "Erro ao cadastrar curso.";
         }
