@@ -10,26 +10,21 @@ if ($_SESSION["usuario_tipo"] == "aluno") {
     exit;
 }
 
+$id = $_GET['curso_id'];
 
 
+    $sql = "SELECT * FROM modulos WHERE curso_id = '$id'";
+    $result = mysqli_query($conexao, $sql);
+    $modulos = mysqli_fetch_assoc($result);
 
-  
-$sqlCursos = "SELECT * FROM modulos";
-$resultadoModulos = mysqli_query($conexao, $sqlCursos);
-
-
+if (isset($_GET["deletado"])) {
+    $sucesso = "Curso excluído com sucesso!";
+}
 ?>
 
+<!-- Lista de Cursos -->               
+        
 <!DOCTYPE html>
-
-<!-- Lista de Cursos -->
-
-                    
-                </tbody>
-            </table>
-        </div>
-
-        <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -95,28 +90,32 @@ $resultadoModulos = mysqli_query($conexao, $sqlCursos);
         <div class="p-6 flex-1">
 
             <!-- MENSAGEM DE SUCESSO -->
+            <?php if (!empty($sucesso)): ?>
             <div class="bg-green-50 border border-green-300 text-green-700 rounded-lg p-3 mb-5 flex items-center gap-2 text-sm">
                 <span class="font-bold text-base">✓</span>
                 
                 <span>Módulo excluído com sucesso!</span>
                 <button class="ml-auto text-green-400 hover:text-green-700 text-lg leading-none">×</button>
             </div>
-
+            <?php endif; ?>
 <!-- LISTA DE MÓDULOS -->
+                
                 <div class="space-y-3">
                     <h2 class="font-bold text-gray-700 text-sm">Módulos do Curso</h2>
 
+                <?php while ($linha = mysqli_fetch_assoc($result)): ?>
                     <!-- Módulo 1 -->
                     <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
                         <div class="flex items-center gap-3 mb-3">
-                            <div class="w-8 h-8 bg-senai-blue rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0">1</div>
+                            <div class="w-8 h-8 bg-senai-blue rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0"><?php echo $linha['ordem']; ?></div>
                             <div class="flex-1">
-                                <p class="font-semibold text-gray-800">Introdução ao HTML</p>
-                                <p class="text-xs text-gray-400">3 aulas cadastradas</p>
+                                
+                                <p class="font-semibold text-gray-800"><?php echo $linha['titulo']; ?></p>
+                                <p class="text-xs text-gray-400"><?php echo $linha['descricao']; ?></p>
                             </div>
                             <div class="flex gap-1.5">
                                 <a href="aulas.php" class="bg-senai-blue text-white text-xs px-2.5 py-1.5 rounded-md">🎬 Aulas</a>
-                                <a href="modulo_form.php" class="bg-yellow-500 text-white text-xs px-2.5 py-1.5 rounded-md">✏</a>
+                                <a href="modulo_form.php?id=<?php echo $linha['id']; ?>" class="bg-yellow-500 text-white text-xs px-2.5 py-1.5 rounded-md">✏</a>
                                 <button class="bg-senai-red text-white text-xs px-2.5 py-1.5 rounded-md">🗑</button>
                             </div>
                         </div>
@@ -125,57 +124,17 @@ $resultadoModulos = mysqli_query($conexao, $sqlCursos);
                             <button class="text-xs text-gray-400 hover:text-gray-600 border border-gray-200 px-2 py-1 rounded">↓ Descer</button>
                         </div>
                     </div>
+                    <?php endwhile; ?>
 
-                    <!-- Módulo 2 -->
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
-                        <div class="flex items-center gap-3 mb-3">
-                            <div class="w-8 h-8 bg-senai-blue rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0">2</div>
-                            <div class="flex-1">
-                                <p class="font-semibold text-gray-800">Estilizando com CSS</p>
-                                <p class="text-xs text-gray-400">3 aulas cadastradas</p>
-                            </div>
-                            <div class="flex gap-1.5">
-                                <a href="aulas.php" class="bg-senai-blue text-white text-xs px-2.5 py-1.5 rounded-md">🎬 Aulas</a>
-                                <a href="modulo_form.php" class="bg-yellow-500 text-white text-xs px-2.5 py-1.5 rounded-md">✏</a>
-                                <button class="bg-senai-red text-white text-xs px-2.5 py-1.5 rounded-md">🗑</button>
-                            </div>
-                        </div>
-                        <div class="flex gap-2">
-                            <button class="text-xs text-gray-400 hover:text-gray-600 border border-gray-200 px-2 py-1 rounded">↑ Subir</button>
-                            <button class="text-xs text-gray-400 hover:text-gray-600 border border-gray-200 px-2 py-1 rounded">↓ Descer</button>
-                        </div>
-                    </div>
 
-                    <!-- Módulo 3 -->
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
-                        <div class="flex items-center gap-3 mb-3">
-                            <div class="w-8 h-8 bg-senai-blue rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0">3</div>
-                            <div class="flex-1">
-                                <p class="font-semibold text-gray-800">Projeto Final</p>
-                                <p class="text-xs text-gray-400">3 aulas cadastradas</p>
-                            </div>
-                            <div class="flex gap-1.5">
-                                <a href="aulas.php" class="bg-senai-blue text-white text-xs px-2.5 py-1.5 rounded-md">🎬 Aulas</a>
-                                <a href="modulo_form.php" class="bg-yellow-500 text-white text-xs px-2.5 py-1.5 rounded-md">✏</a>
-                                <button class="bg-senai-red text-white text-xs px-2.5 py-1.5 rounded-md">🗑</button>
-                            </div>
-                        </div>
-                        <div class="flex gap-2">
-                            <button class="text-xs text-gray-400 hover:text-gray-600 border border-gray-200 px-2 py-1 rounded">↑ Subir</button>
-                            <button class="text-xs text-gray-400 hover:text-gray-600 border border-gray-200 px-2 py-1 rounded">↓ Descer</button>
-                        </div>
-                    </div>
-                </div>
-
-            
-                        
+    
                                   
 
                 <!-- RODAPÉ DA TABELA -->
 
                 
                 <div class="border-t border-gray-100 px-4 py-3 flex items-center justify-between bg-gray-50">
-                    <p class="text-xs text-gray-400">Exibindo 3 de 3 cursos</p>
+                    <p class="text-xs text-gray-400">Exibindo <?php echo mysqli_num_rows($result)?> módulos</p>
                     <div class="flex gap-1">
                         <button class="px-3 py-1 text-xs border border-gray-300 rounded bg-white text-gray-500">← Anterior</button>
                         <button class="px-3 py-1 text-xs border border-senai-blue rounded bg-senai-blue text-white font-semibold">1</button>

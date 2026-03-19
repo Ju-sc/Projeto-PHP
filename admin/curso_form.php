@@ -33,9 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $tiposPerm = ["image/jpeg", "image/png", "image/webp"]; 
 
     
-// Verificar se o email já existe
-$sql = "SELECT * FROM cursos WHERE titulo = '$titulo'";
-$resultado = mysqli_query($conexao, $sql);
+
 
 if ($capa["size"] > 0){
 if (!in_array($capa["type"], $tiposPerm)){
@@ -47,6 +45,7 @@ else {
     move_uploaded_file($capa["tmp_name"], to: "../uploads/" . $NomeImagem);
 }
 }
+
 if (empty($erro)) {
     
     if (!empty($_POST["id"])) {
@@ -64,18 +63,27 @@ if (empty($erro)) {
         ativo = '$ativo'
         $capaSql
         WHERE id = '$id'";
+
     } else {
-        $sql = "INSERT INTO cursos (titulo, descricao, ativo, capa) VALUES ('$titulo', '$descricao', '$ativo', '$NomeImagem')";
+        $sql2 = "SELECT * FROM cursos WHERE titulo = '$titulo'";
+        $resultado = mysqli_query($conexao, $sql2);
+        if (mysqli_num_rows($resultado) > 0) {
+            $erro = "Este curso já está cadastrado.";
+        } else {
+            $sql = "INSERT INTO cursos (titulo, descricao, ativo, capa) VALUES ('$titulo', '$descricao', '$ativo', '$NomeImagem')";
+        }
     }
-    if (mysqli_query($conexao, $sql)) {
-        $sucesso = "Curso salvo com sucesso!";
-    } else {
-        $erro = "Erro ao salvar curso.";
-    }   
+
+    if (empty($erro)) {
+        if (mysqli_query($conexao, $sql)) {
+            $sucesso = "Curso salvo com sucesso!";
+            header("Location: cursos.php");
+            exit;
+        } else {
+            $erro = "Erro ao salvar curso.";
+        }
+    }
 }
-    if (mysqli_num_rows($resultado) > 0) {
-        $erro = "Este curso já está cadastrado.";
-    } 
 }
 
 ?>

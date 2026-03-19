@@ -9,3 +9,17 @@ if ($_SESSION["usuario_tipo"] == "aluno") {
     exit;
 }
 
+if (isset($_GET['id'])) {
+$id = $_GET["id"];
+
+$sql = "DELETE FROM modulos WHERE id = $id";
+mysqli_query($conexao, $sql);
+//$idVisual -=1;
+
+// 4. Volta para a página que pediu a exclusão
+header("Location: ../admin/modulos.php?deletado=1");
+exit;
+} else {
+    echo "Curso não encontrado.";
+}
+?>  

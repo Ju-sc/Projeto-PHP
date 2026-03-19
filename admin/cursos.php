@@ -80,11 +80,11 @@ if (isset($_GET["deletado"])) {
                     <p class="text-gray-500 text-xs">admin@ead.com</p>
                 </div>
             </div>
-        </div>
+        </div>"curso_delete.php?id=<?php echo $editando['id'] ?? '' ?>"
         <nav class="flex-1 p-3 space-y-1">
             <a href="index.php"      class="nav-link">📊 <span>Dashboard</span></a>
             <a href="cursos.php"     class="nav-link active">📚 <span>Cursos</span></a>
-            <a href="modulos.php"    class="nav-link">📦 <span>Módulos</span></a>
+            <a href="modulos.php?curso_id = <?= $linha['id'] ?>"    class="nav-link">📦 <span>Módulos</span></a>
             <a href="aulas.php"      class="nav-link">🎬 <span>Aulas</span></a>
             <div class="pt-2 border-t border-gray-700 mt-2">
                 <a href="../index.php" class="nav-link">👁 <span>Ver site</span></a>
@@ -154,7 +154,7 @@ if (isset($_GET["deletado"])) {
     <td class="px-4 py-3"><?php echo $linha['criado_em']; ?></td>
     <td class="px-4 py-3 text-center">
         <div class="flex items-center justify-center gap-1.5">
-            <a href="modulos.php" class="bg-senai-blue text-white text-xs px-2.5 py-1.5 rounded-md hover:bg-senai-blue-dark transition">📦 Módulos</a>
+            <a href="modulos.php?curso_id=<?= $linha['id'] ?>" class="bg-senai-blue text-white text-xs px-2.5 py-1.5 rounded-md hover:bg-senai-blue-dark transition">📦 Módulos</a>
             <a href="curso_form.php?id=<?= $linha["id"]?>" class="bg-yellow-500 text-white text-xs px-2.5 py-1.5 rounded-md hover:bg-yellow-600 transition">✏ Editar</a>
             <a href="curso_delete.php?id=<?php echo $linha['id']; ?>"
             onclick="return confirm('Excluir este curso?')"
