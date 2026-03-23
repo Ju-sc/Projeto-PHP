@@ -8,7 +8,7 @@ require_once "../conexao.php";
 if ($_SESSION["usuario_tipo"] == "aluno") {
     header("Location: ../meus_cursos.php");
     exit;
-}
+} 
 
 $erro = "";
 $sucesso = "";
@@ -16,7 +16,7 @@ $editando = NULL;
 
 if (isset($_GET['id'])) {
 $id = $_GET["id"];
-$sql = "SELECT * FROM modulos WHERE curso_id = '$id'";
+$sql = "SELECT * FROM modulos WHERE id = '$id'";
 $result = mysqli_query($conexao, $sql);
 $editando = mysqli_fetch_assoc($result);
  
@@ -28,8 +28,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $CursoID  = $_POST["curso_id"];
     $titulo = $_POST["titulo"];
     $descricao = $_POST["descricao"];
-    $ordem =["ordem"];
-}
+    $ordem =$_POST["ordem"];
+
  // Verificar se o modulo já existe
  if (empty($erro)) {
     
@@ -47,10 +47,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $resultado = mysqli_query($conexao, $sql2);
 
         if (mysqli_num_rows($resultado) > 0) {
-            $erro = "Este curso já está cadastrado.";
-        } else {
-            $sql = "INSERT INTO cursos (titulo, descricao, ativo, capa) 
-            VALUES ('$titulo', '$descricao', '$ativo', '$NomeImagem')";
+            $erro = "Este modulo já está cadastrado.";
+        } else {            
+            $sql = "INSERT INTO modulos (titulo, descricao, curso_id, ordem) 
+            VALUES ('$titulo', '$descricao', '$CursoID', '$ordem')";
         }
     }
 
@@ -65,11 +65,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
 }
+}
 
-
-
-
-
+$sqlCursos = "SELECT id, titulo FROM cursos ORDER BY titulo";
+$resultCursos = mysqli_query($conexao, $sqlCursos);
 
 ?>
 
@@ -105,7 +104,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <a href="modulos.php" class="nav-link active">📦 Módulos</a>
             <a href="aulas.php"   class="nav-link">🎬 Aulas</a>
             <div class="pt-2 border-t border-gray-700 mt-2">
-                <a href="../login.php" class="nav-link text-red-400">🚪 Sair</a>
+                <a href="../logout.php" class="nav-link text-red-400">🚪 Sair</a>
             </div>
         </nav>
     </aside>
@@ -114,7 +113,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <div class="flex items-center gap-2 text-xs text-gray-400 mb-1">
                 <a href="cursos.php" class="hover:text-senai-blue">Cursos</a> ›
                 <a href="modulos.php" class="hover:text-senai-blue">Módulos</a> ›
-                <a href="modulo_form.php" class="text-xl font-extrabold text-gray-800">Editar Módulo</span>
+                <a href="modulo_form.php" class="text-xl font-extrabold text-gray-800">Editar Módulo</a></span>
             </div>
             <h1 class="text-xl font-extrabold text-gray-800">Editar Módulo</h1>
         </div>
@@ -125,10 +124,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     <div class="mb-4">
                         <label class="form-label">Curso</label>
                         <select name="curso_id" class="form-input">
-                            <option value="1" selected>HTML e CSS do Zero</option>
-                            <option value="2">PHP para Iniciantes</option>
-                        </select>
+                        <?php
+                        while ($curso = mysqli_fetch_assoc($resultCursos)) {
+                            $selecionei = (!empty($editando) && $editando['curso_id'] == $curso['id']) ? 'selected' : '';
+                            echo "<option value='{$curso['id']}' $selecionei>{$curso['titulo']}</option>";
+                        }
+    ?>
+</select>
                     </div>
+                    <!-- TÍTULO -->
                     <div class="mb-4">
                         <label class="form-label">Título do Módulo</label>
                         <input type="text" 
@@ -136,22 +140,27 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         class="form-input" 
                         value="<?= $editando['titulo'] ?? '' ?>">
                     </div>
-                    <div class="mb-4">
-                        <label class="form-label">Descrição (opcional)</label>
 
-                        <textarea name="descricao" 
-                        rows="3" 
-                        class="form-input resize-none"></textarea>
-                        ><?= $editando['descricao'] ?? '' ?>
-
+                    <!-- DESCRIÇÃO -->
+                    <div class="mb-5">
+                                <label class="form-label">Descrição</label>
+                                
+                                <textarea 
+                                    name="descricao"
+                                    rows="4"
+                                    class="form-input resize-none"
+                                    ><?= $editando['descricao'] ?? '' ?></textarea>
+                                <p class="text-xs text-gray-400 mt-1">Opcional</p>
+                            </div>
+                    <!-- ORDEM -->
                     </div>
                     <div class="mb-5">
                         <label class="form-label">Ordem</label>
-                        <input type="number" name="ordem" class="form-input" value="1" min="1">
+                        <input type="number" name="ordem" class="form-input" value="<?= $editando['ordem'] ?? '' ?>" min="1">
                     </div>
                     <div class="flex gap-2">
                         <button type="submit" class="bg-senai-blue text-white font-bold px-5 py-2.5 rounded-lg text-sm hover:bg-senai-blue-dark transition">💾 Salvar</button>
-                        <a href="modulos.html" class="bg-gray-100 text-gray-600 font-semibold px-5 py-2.5 rounded-lg text-sm hover:bg-gray-200 transition">Cancelar</a>
+                        <a href="modulos.php" class="bg-gray-100 text-gray-600 font-semibold px-5 py-2.5 rounded-lg text-sm hover:bg-gray-200 transition">Cancelar</a>
                     </div>
                 </form>
             </div>

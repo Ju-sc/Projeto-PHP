@@ -18,7 +18,7 @@ $id = $_GET['curso_id'];
     $modulos = mysqli_fetch_assoc($result);
 
 if (isset($_GET["deletado"])) {
-    $sucesso = "Curso excluído com sucesso!";
+    $sucesso = "Módulo excluído com sucesso!";
 }
 ?>
 

@@ -200,7 +200,9 @@ if (empty($erro)) {
                                 <div class="border-2 border-dashed border-gray-300 rounded-xl p-5 text-center hover:border-senai-blue transition cursor-pointer bg-gray-50">
                                     <!-- Preview da capa atual -->
                                     <div class="bg-gradient-to-br from-blue-500 to-blue-700 w-32 h-20 rounded-lg mx-auto mb-3 flex items-center justify-center">
-                                        <img src="../uploads/<?= $editando['capa'] ?? '' ?>">Capa atual. Clique para alterar.</p>
+                                        <img src="../uploads/<?= $editando['capa'] ?? '' ?>" width="100%">
+                                    </div>
+                                        <p class="text-xs text-gray-500 mb-3">Capa atual. Clique para alterar.</p>
                                     <input type="file" name="capa" accept="image/*" class="hidden" id="input-capa">
                                     <label for="input-capa" class="bg-white border border-gray-300 text-gray-600 text-xs font-semibold px-4 py-2 rounded-lg cursor-pointer hover:bg-gray-50 transition">
                                         Selecionar nova imagem
